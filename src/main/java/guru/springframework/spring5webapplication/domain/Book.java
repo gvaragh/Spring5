@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Book {
@@ -18,6 +19,66 @@ public class Book {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long Id;
 
+	private String name;
+	private String isbn;
+
+	public Book() {
+	}
+	
+	public Book(String name, String isbn) {
+		super();
+		this.name = name;
+		this.isbn = isbn;
+	}
+	
+	@ManyToMany
+	@JoinTable(name = "authors_books", joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "Id"), 
+	inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "Id"))
+	private Set<Author> authors = new HashSet<>();
+
+	@ManyToOne
+	private Publisher publisher;
+	
+	public Publisher getPublisher() {
+		return publisher;
+	}
+
+	public void setPublisher(Publisher publisher) {
+		this.publisher = publisher;
+	}
+
+	public Long getId() {
+		return Id;
+	}
+
+	public void setId(Long id) {
+		Id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getIsbn() {
+		return isbn;
+	}
+
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
+	}
+
+	public Set<Author> getAuthors() {
+		return authors;
+	}
+
+	public void setAuthors(Set<Author> authors) {
+		this.authors = authors;
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -56,52 +117,6 @@ public class Book {
 		} else if (!Id.equals(other.Id))
 			return false;
 		return true;
-	}
-
-	private String name;
-	private String isbn;
-
-	@ManyToMany
-	@JoinTable(name = "authors_books", joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "Id"), 
-	inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "Id"))
-	private Set<Author> authors = new HashSet<>();
-
-	public Long getId() {
-		return Id;
-	}
-
-	public Book(String name, String isbn) {
-		super();
-		this.name = name;
-		this.isbn = isbn;
-	}
-
-	public void setId(Long id) {
-		Id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getIsbn() {
-		return isbn;
-	}
-
-	public void setIsbn(String isbn) {
-		this.isbn = isbn;
-	}
-
-	public Set<Author> getAuthors() {
-		return authors;
-	}
-
-	public void setAuthors(Set<Author> authors) {
-		this.authors = authors;
 	}
 
 }
